@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Net Calculator | The Realtorian</title>
+<meta name="description" content="Estimate how much you'll net from the sale of your home. Free seller net sheet calculator from The Realtorian — David Cole, eXp Realty, Upstate SC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1A3A6B;--navy-dark:#0f2347;--navy-mid:#1e4480;--navy-light:#2a5298;
+  --gold:#B07D2A;--gold-light:#C4922A;--gold-pale:#f5ead8;--gold-faint:#fdf8f0;
+  --red:#8B2020;--cream:#FAF7F0;--parchment:#F0E8D5;
+  --ink:#1C1A17;--ink-mid:#3D3A34;--ink-light:#6B6558;--ink-faint:#A09888;
+  --border:rgba(176,125,42,0.22);--border-strong:rgba(176,125,42,0.45);
+  --success:#1a6b3a;--success-bg:#eaf5ee;
+  --shadow:0 2px 16px rgba(26,58,107,0.10);
+  --shadow-lg:0 8px 40px rgba(26,58,107,0.15);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+
+/* NAV */
+nav{background:var(--navy-dark);border-bottom:2px solid var(--gold);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-seal{width:36px;height:36px;border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}
+.nav-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:#fff;letter-spacing:0.04em;display:block}
+.nav-tagline{font-size:10px;color:var(--gold-light);letter-spacing:0.12em;text-transform:uppercase;display:block;margin-top:1px}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;letter-spacing:0.04em;transition:color 0.2s}
+.nav-links a:hover{color:var(--gold-light)}
+.nav-cta{background:var(--gold)!important;color:var(--navy-dark)!important;padding:7px 16px;border-radius:3px;font-weight:600!important;font-size:12px!important}
+
+/* HERO */
+.hero{background:var(--navy-dark);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(176,125,42,0.05) 39px,rgba(176,125,42,0.05) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(176,125,42,0.05) 39px,rgba(176,125,42,0.05) 40px)}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent)}
+.hero-inner{position:relative;z-index:1;max-width:640px;margin:0 auto}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-light);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:12px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:36px;height:1px;background:var(--gold);opacity:0.6}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:#fff;line-height:1.2;margin-bottom:8px}
+.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;color:var(--gold-light);margin-bottom:1rem}
+.hero-desc{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:500px;margin:0 auto}
+
+/* MAIN LAYOUT */
+.page{max-width:1080px;margin:0 auto;padding:2.5rem 1.5rem 4rem;display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:start}
+
+/* FORM PANEL */
+.form-panel{background:#fff;border:1px solid var(--border-strong);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
+.panel-header{background:var(--navy);padding:1rem 1.5rem;display:flex;align-items:center;gap:10px}
+.panel-header-icon{font-size:18px}
+.panel-header-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#fff}
+.panel-header-sub{font-size:11px;color:var(--gold-light);margin-top:1px}
+.form-body{padding:1.5rem}
+
+.form-section{margin-bottom:1.5rem}
+.section-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:1rem}
+
+.field{margin-bottom:1rem}
+.field label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:500;color:var(--ink-mid);margin-bottom:5px}
+.field label span{font-size:11px;color:var(--ink-faint);font-weight:400}
+.input-wrap{position:relative}
+.input-prefix,.input-suffix{position:absolute;top:50%;transform:translateY(-50%);font-size:14px;font-weight:600;color:var(--ink-light);pointer-events:none}
+.input-prefix{left:11px}
+.input-suffix{right:11px}
+.field input[type=number],.field input[type=text]{width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:3px;background:#fdfcf9;color:var(--ink);font-family:'Barlow',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;-moz-appearance:textfield}
+.field input[type=number]::-webkit-inner-spin-button,.field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+.field input.has-prefix{padding-left:26px}
+.field input.has-suffix{padding-right:30px}
+.field input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,58,107,0.08)}
+.field input::placeholder{color:var(--ink-faint)}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Slider */
+.slider-wrap{display:flex;align-items:center;gap:10px;margin-top:4px}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--parchment);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--navy);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--navy);border:2px solid #fff;cursor:pointer}
+.slider-val{font-size:14px;font-weight:700;color:var(--navy);min-width:40px;text-align:right}
+
+.checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer}
+.checkbox-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}
+.checkbox-row label{font-size:13px;color:var(--ink-mid);cursor:pointer}
+
+.calc-btn{width:100%;padding:13px;background:var(--navy);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:3px;cursor:pointer;margin-top:0.5rem;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.calc-btn:hover{background:var(--navy-mid)}
+.reset-btn{width:100%;padding:8px;background:transparent;color:var(--ink-faint);font-family:'Barlow',sans-serif;font-size:12px;border:none;cursor:pointer;margin-top:6px;transition:color 0.2s}
+.reset-btn:hover{color:var(--ink-mid)}
+
+/* RESULTS PANEL */
+.results-panel{position:sticky;top:72px}
+.results-card{background:#fff;border:1px solid var(--border-strong);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
+.results-header{background:var(--navy-dark);padding:1.25rem 1.5rem;text-align:center;position:relative}
+.results-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.results-label{font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold-light);margin-bottom:6px}
+.results-amount{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:600;color:#fff;line-height:1;margin-bottom:4px;transition:all 0.3s}
+.results-amount.negative{color:#ff6b6b}
+.results-note{font-size:11px;color:rgba(255,255,255,0.45);font-style:italic}
+
+.results-body{padding:1.25rem 1.5rem}
+.line-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.line-item:last-of-type{border-bottom:none}
+.line-item-label{font-size:13px;color:var(--ink-mid)}
+.line-item-label small{display:block;font-size:11px;color:var(--ink-faint);margin-top:1px}
+.line-item-amount{font-size:13px;font-weight:600;color:var(--ink);text-align:right}
+.line-item-amount.deduction{color:var(--red)}
+.line-item-amount.neutral{color:var(--ink-light)}
+
+.divider-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0 6px;margin-top:4px;border-top:2px solid var(--navy)}
+.divider-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--navy)}
+.divider-amount{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:var(--navy)}
+.divider-amount.negative{color:var(--red)}
+
+.disclaimer{background:var(--gold-faint);border-top:1px solid var(--border);padding:1rem 1.5rem;font-size:11.5px;color:var(--ink-light);line-height:1.6;font-style:italic}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:3rem 1.5rem}
+.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:0.4}
+.empty-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink-mid);margin-bottom:6px}
+.empty-sub{font-size:13px;color:var(--ink-faint)}
+
+/* CTA */
+.cta-card{background:var(--navy-dark);border:1px solid var(--gold);border-radius:4px;padding:1.5rem;margin-top:1.25rem;text-align:center;position:relative;overflow:hidden}
+.cta-card::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(176,125,42,0.05) 39px,rgba(176,125,42,0.05) 40px);pointer-events:none}
+.cta-inner{position:relative;z-index:1}
+.cta-eyebrow{font-size:10px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold-light);margin-bottom:6px}
+.cta-heading{font-family:'Playfair Display',serif;font-size:1.15rem;color:#fff;margin-bottom:6px}
+.cta-sub{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:1rem}
+.btn-gold{display:block;padding:11px 20px;background:var(--gold);color:var(--navy-dark);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:3px;border:none;cursor:pointer;transition:background 0.2s;margin-bottom:8px}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-ghost{display:block;padding:9px 20px;background:transparent;color:rgba(255,255,255,0.65);font-family:'Barlow',sans-serif;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,0.2);border-radius:3px;transition:all 0.2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-light)}
+
+/* FOOTER */
+footer{background:var(--navy-dark);border-top:2px solid var(--gold);padding:2rem;text-align:center;color:rgba(255,255,255,0.45);font-size:12px;line-height:1.8}
+footer a{color:var(--gold-light);text-decoration:none}
+footer strong{color:rgba(255,255,255,0.7)}
+
+@media(max-width:780px){
+  .page{grid-template-columns:1fr}
+  .results-panel{position:static}
+  .nav-links{display:none}
+}
+@media(max-width:480px){
+  .field-row{grid-template-columns:1fr}
+  .hero{padding:2.5rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://davidcole.exprealty.com" class="nav-brand">
+    <div class="nav-seal">🦅</div>
+    <div>
+      <span class="nav-title">The Realtorian</span>
+      <span class="nav-tagline">Your tour guide in real estate</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://davidcole.exprealty.com">Home Search</a></li>
+    <li><a href="history.localrealtorian.com">History Map</a></li>
+    <li><a href="relocation-guide.html">Relocation Guide</a></li>
+    <li><a href="https://davidcole.exprealty.com">Buy</a></li>
+    <li><a href="#contact" class="nav-cta">Contact David</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Seller Tools — The Realtorian</div>
+    <h1>Seller Net Calculator</h1>
+    <p class="hero-sub">Estimate your proceeds before you list</p>
+    <p class="hero-desc">Enter your expected sale price, mortgage balance, and costs below to get an instant estimate of what you'll walk away with at closing. No email required.</p>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- FORM -->
+  <div class="form-panel">
+    <div class="panel-header">
+      <div class="panel-header-icon">🏠</div>
+      <div>
+        <div class="panel-header-title">Your Sale Details</div>
+        <div class="panel-header-sub">Fill in what applies to your situation</div>
+      </div>
+    </div>
+    <div class="form-body">
+
+      <!-- SALE INFO -->
+      <div class="form-section">
+        <div class="section-label">Sale Price</div>
+        <div class="field">
+          <label>Expected Sale Price <span>required</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" id="sale-price" class="has-prefix" placeholder="300,000" min="0" step="1000">
+          </div>
+        </div>
+      </div>
+
+      <!-- MORTGAGE -->
+      <div class="form-section">
+        <div class="section-label">Mortgage & Liens</div>
+        <div class="field">
+          <label>Current Mortgage Balance <span>payoff amount</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" id="mortgage" class="has-prefix" placeholder="200,000" min="0" step="1000">
+          </div>
+        </div>
+        <div class="field">
+          <label>Second Mortgage / HELOC <span>if applicable</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" id="heloc" class="has-prefix" placeholder="0" min="0" step="1000">
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENT COMMISSION -->
+      <div class="form-section">
+        <div class="section-label">Agent Commission</div>
+        <div class="field">
+          <label>Total Commission Rate <span id="comm-display">6%</span></label>
+          <div class="slider-wrap">
+            <input type="range" id="commission" min="0" max="10" step="0.25" value="6">
+            <span class="slider-val" id="comm-val">6%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLOSING COSTS -->
+      <div class="form-section">
+        <div class="section-label">Seller Closing Costs</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Title/Attorney Fees</label>
+            <div class="input-wrap">
+              <span class="input-prefix">$</span>
+              <input type="number" id="attorney" class="has-prefix" placeholder="1,500" min="0" step="100">
+            </div>
+          </div>
+          <div class="field">
+            <label>Transfer Tax / Deed Stamps</label>
+            <div class="input-wrap">
+              <span class="input-prefix">$</span>
+              <input type="number" id="transfer-tax" class="has-prefix" placeholder="0" min="0" step="100">
+            </div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Property Taxes (prorated)</label>
+            <div class="input-wrap">
+              <span class="input-prefix">$</span>
+              <input type="number" id="prop-tax" class="has-prefix" placeholder="800" min="0" step="100">
+            </div>
+          </div>
+          <div class="field">
+            <label>HOA Fees / Payoff</label>
+            <div class="input-wrap">
+              <span class="input-prefix">$</span>
+              <input type="number" id="hoa" class="has-prefix" placeholder="0" min="0" step="100">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPTIONAL COSTS -->
+      <div class="form-section">
+        <div class="section-label">Optional / Negotiated Items</div>
+        <div class="field">
+          <label>Seller Concessions / Closing Cost Assist <span>if offering to buyer</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" id="concessions" class="has-prefix" placeholder="0" min="0" step="500">
+          </div>
+        </div>
+        <div class="field">
+          <label>Home Warranty <span>if providing to buyer</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" id="warranty" class="has-prefix" placeholder="0" min="0" step="50">
+          </div>
+        </div>
+        <div class="field">
+          <label>Repairs / Credits Agreed To</label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" id="repairs" class="has-prefix" placeholder="0" min="0" step="100">
+          </div>
+        </div>
+        <div class="field">
+          <label>Other Deductions <span>misc.</span></label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" id="other" class="has-prefix" placeholder="0" min="0" step="100">
+          </div>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="calculate()">
+        <span>⚖️</span> Calculate My Net Proceeds
+      </button>
+      <button class="reset-btn" onclick="resetForm()">↺ Reset all fields</button>
+
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-panel">
+    <div class="results-card">
+      <div class="results-header">
+        <div class="results-label">Estimated Net Proceeds</div>
+        <div class="results-amount" id="net-amount">—</div>
+        <div class="results-note" id="net-note">Enter your details and click Calculate</div>
+      </div>
+      <div class="results-body" id="results-body">
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <div class="empty-title">Your net sheet will appear here</div>
+          <div class="empty-sub">Fill in the form on the left and hit Calculate to see a full breakdown of your estimated proceeds.</div>
+        </div>
+      </div>
+      <div class="disclaimer">
+        ⚠️ This is an estimate only. Actual net proceeds will vary based on your specific loan payoff, prorations, negotiated terms, and final closing statement. Always consult with your agent and closing attorney for exact figures.
+      </div>
+    </div>
+
+    <div class="cta-card" id="contact">
+      <div class="cta-inner">
+        <div class="cta-eyebrow">Ready to List?</div>
+        <div class="cta-heading">Get a Free Home Value Assessment</div>
+        <div class="cta-sub">David can give you a precise comparative market analysis — so your sale price isn't a guess. Serving Greenville, Spartanburg, Laurens, Anderson & Cherokee counties.</div>
+        <a class="btn-gold" href="https://davidcole.exprealty.com">Request a Free CMA</a>
+        <a class="btn-ghost" href="tel:+18285829506">Call David: (828) 582-9506</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <strong>The Realtorian</strong> · David Cole · eXp Realty · Simpsonville, SC<br>
+  Serving Greenville · Spartanburg · Laurens · Anderson · Cherokee · Greenwood Counties<br>
+  <a href="https://davidcole.exprealty.com">davidcole.exprealty.com</a> · <a href="mailto:Realtorian@DavidColeRE.com">Realtorian@DavidColeRE.com</a> · <a href="tel:+18285829506">(828) 582-9506</a><br><br>
+  <span style="opacity:0.5;font-size:11px">This calculator provides estimates for informational purposes only and does not constitute financial or legal advice.</span>
+</footer>
+
+<script>
+const fmt = n => '$' + Math.abs(Math.round(n)).toLocaleString('en-US');
+const val = id => parseFloat(document.getElementById(id).value) || 0;
+
+// Live commission slider
+const commSlider = document.getElementById('commission');
+const commVal = document.getElementById('comm-val');
+commSlider.addEventListener('input', () => {
+  commVal.textContent = commSlider.value + '%';
+});
+
+function calculate() {
+  const salePrice = val('sale-price');
+  if (!salePrice) {
+    alert('Please enter an expected sale price to calculate.');
+    return;
+  }
+
+  const mortgage    = val('mortgage');
+  const heloc       = val('heloc');
+  const commRate    = parseFloat(commSlider.value) / 100;
+  const commission  = salePrice * commRate;
+  const attorney    = val('attorney');
+  const transferTax = val('transfer-tax');
+  const propTax     = val('prop-tax');
+  const hoa         = val('hoa');
+  const concessions = val('concessions');
+  const warranty    = val('warranty');
+  const repairs     = val('repairs');
+  const other       = val('other');
+
+  const totalDeductions = mortgage + heloc + commission + attorney + transferTax + propTax + hoa + concessions + warranty + repairs + other;
+  const net = salePrice - totalDeductions;
+
+  // Update big number
+  const netEl = document.getElementById('net-amount');
+  netEl.textContent = fmt(net);
+  netEl.className = 'results-amount' + (net < 0 ? ' negative' : '');
+
+  const pct = salePrice > 0 ? ((net / salePrice) * 100).toFixed(1) : 0;
+  document.getElementById('net-note').textContent = net >= 0
+    ? `${pct}% of your sale price`
+    : 'Proceeds are negative — consider adjusting your sale price or payoffs';
+
+  // Build line items
+  const lines = [
+    { label: 'Sale Price', sub: null, amount: salePrice, sign: 1, always: true },
+  ];
+  if (mortgage)    lines.push({ label: 'Mortgage Payoff', sub: null, amount: mortgage, sign: -1 });
+  if (heloc)       lines.push({ label: 'HELOC / 2nd Mortgage', sub: null, amount: heloc, sign: -1 });
+  if (commission)  lines.push({ label: 'Agent Commission', sub: `${commSlider.value}% of sale price`, amount: commission, sign: -1 });
+  if (attorney)    lines.push({ label: 'Title / Attorney Fees', sub: null, amount: attorney, sign: -1 });
+  if (transferTax) lines.push({ label: 'Transfer Tax / Deed Stamps', sub: null, amount: transferTax, sign: -1 });
+  if (propTax)     lines.push({ label: 'Property Tax Proration', sub: null, amount: propTax, sign: -1 });
+  if (hoa)         lines.push({ label: 'HOA Fees / Payoff', sub: null, amount: hoa, sign: -1 });
+  if (concessions) lines.push({ label: 'Seller Concessions', sub: 'closing cost assist to buyer', amount: concessions, sign: -1 });
+  if (warranty)    lines.push({ label: 'Home Warranty', sub: null, amount: warranty, sign: -1 });
+  if (repairs)     lines.push({ label: 'Repairs / Credits', sub: null, amount: repairs, sign: -1 });
+  if (other)       lines.push({ label: 'Other Deductions', sub: null, amount: other, sign: -1 });
+
+  const html = lines.map(l => `
+    <div class="line-item">
+      <div class="line-item-label">
+        ${l.label}
+        ${l.sub ? `<small>${l.sub}</small>` : ''}
+      </div>
+      <div class="line-item-amount ${l.sign < 0 ? 'deduction' : 'neutral'}">
+        ${l.sign < 0 ? '− ' : ''}${fmt(l.amount)}
+      </div>
+    </div>`).join('') + `
+    <div class="divider-row">
+      <div class="divider-label">Estimated Net</div>
+      <div class="divider-amount ${net < 0 ? 'negative' : ''}">${fmt(net)}</div>
+    </div>`;
+
+  document.getElementById('results-body').innerHTML = html;
+
+  // Scroll results into view on mobile
+  if (window.innerWidth < 780) {
+    document.querySelector('.results-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function resetForm() {
+  ['sale-price','mortgage','heloc','attorney','transfer-tax','prop-tax','hoa','concessions','warranty','repairs','other'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  commSlider.value = 6;
+  commVal.textContent = '6%';
+  document.getElementById('net-amount').textContent = '—';
+  document.getElementById('net-note').textContent = 'Enter your details and click Calculate';
+  document.getElementById('results-body').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">Your net sheet will appear here</div>
+      <div class="empty-sub">Fill in the form on the left and hit Calculate to see a full breakdown of your estimated proceeds.</div>
+    </div>`;
+}
+
+// Auto-calculate on Enter
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+});
+</script>
+</body>
+</html>

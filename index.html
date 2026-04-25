@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revolutionary War in Upstate SC | The Realtorian</title>
+<meta name="description" content="Explore 29 Revolutionary War battle sites, forts, and skirmishes across Upstate South Carolina. Interactive map by The Realtorian — your tour guide in Upstate SC real estate.">
+<meta name="keywords" content="Revolutionary War Upstate SC, Kings Mountain, Cowpens, Musgrove Mill, Blackstocks, Spartanburg history, Greenville SC history, Upcountry SC real estate, The Realtorian, David Cole eXp Realty">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1A3A6B;
+    --navy-dark: #0f2347;
+    --navy-light: #2a5298;
+    --gold: #B07D2A;
+    --gold-light: #C4922A;
+    --gold-pale: #f5ead8;
+    --red: #8B2020;
+    --red-light: #c0392b;
+    --cream: #FAF7F0;
+    --parchment: #F0E8D5;
+    --parchment-dark: #DDD0B8;
+    --ink: #1C1A17;
+    --ink-mid: #3D3A34;
+    --ink-light: #6B6558;
+    --ink-faint: #A09888;
+    --border: rgba(176,125,42,0.25);
+    --border-strong: rgba(176,125,42,0.5);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--navy-dark);
+    border-bottom: 2px solid var(--gold);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .nav-seal {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .nav-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.04em;
+  }
+  .nav-tagline {
+    font-size: 10px;
+    color: var(--gold-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta {
+    background: var(--gold);
+    color: var(--navy-dark) !important;
+    padding: 7px 16px;
+    border-radius: 3px;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy-dark) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy-dark);
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(176,125,42,0.06) 39px, rgba(176,125,42,0.06) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(176,125,42,0.06) 39px, rgba(176,125,42,0.06) 40px);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+  .hero-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    margin-bottom: 1.5rem;
+  }
+  .hero-desc {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.72);
+    max-width: 580px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    border: 1px solid rgba(176,125,42,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .hero-stat {
+    flex: 1;
+    min-width: 120px;
+    padding: 1rem 1.5rem;
+    border-right: 1px solid rgba(176,125,42,0.3);
+    background: rgba(255,255,255,0.04);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .page-content { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── CONTROLS ── */
+  .controls-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    padding: 7px 16px;
+    border-radius: 2px;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--ink-light);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .search-wrap {
+    margin-left: auto;
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .search-input {
+    padding: 7px 12px 7px 34px;
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    background: #fff;
+    color: var(--ink);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--navy); }
+  .search-input::placeholder { color: var(--ink-faint); }
+
+  /* ── MAP + SIDEBAR LAYOUT ── */
+  .map-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  /* ── MAP ── */
+  .map-container {
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #ddd5be;
+    position: sticky;
+    top: 72px;
+  }
+  .map-header {
+    background: var(--navy);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .map-header-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+  }
+  .map-header-sub { font-size: 11px; color: var(--gold-light); }
+
+  /* Leaflet custom popup */
+  .leaflet-popup-content-wrapper {
+    border-radius: 3px !important;
+    border: 1px solid var(--border-strong) !important;
+    box-shadow: 0 4px 20px rgba(26,58,107,0.18) !important;
+    padding: 0 !important;
+    overflow: hidden;
+  }
+  .leaflet-popup-content { margin: 0 !important; width: 240px !important; }
+  .leaflet-popup-tip { background: #fff !important; }
+  .popup-header { background: var(--navy); padding: 10px 13px; }
+  .popup-name { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; }
+  .popup-meta { font-size: 11px; color: var(--gold-light); margin-top: 2px; }
+  .popup-body { padding: 10px 13px; background: #fff; }
+  .popup-desc { font-family: 'Source Serif 4', serif; font-size: 12px; color: var(--ink-mid); line-height: 1.55; }
+  .popup-badge { display:inline-block; font-size:10px; font-weight:600; padding:2px 7px; border-radius:2px; margin-top:6px; letter-spacing:0.04em; text-transform:uppercase; }
+
+  /* Custom marker styles */
+  .custom-marker { display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); cursor:pointer; transition:transform 0.15s; }
+  .custom-marker:hover { transform:scale(1.25); }
+  .star-marker { display:flex; align-items:center; justify-content:center; cursor:pointer; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35)); transition:transform 0.15s; }
+  .star-marker:hover { transform:scale(1.25); }
+  #map-svg { width: 100%; height: 500px; display: block; }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 8px 14px;
+    background: rgba(26,58,107,0.06);
+    border-top: 1px solid var(--border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--ink-light);
+    letter-spacing: 0.03em;
+  }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 580px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: var(--parchment); }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  .site-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 11px 13px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .site-card:hover { border-color: var(--gold); }
+  .site-card.active {
+    border-color: var(--navy);
+    border-left: 3px solid var(--navy);
+    background: #f8f6ff;
+  }
+  .card-top { display: flex; align-items: flex-start; gap: 10px; }
+  .card-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .card-name {
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .card-meta { font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
+  .card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .card-desc {
+    font-family: 'Source Serif 4', serif;
+    font-size: 12.5px;
+    color: var(--ink-mid);
+    margin-top: 8px;
+    line-height: 1.6;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    display: none;
+  }
+  .site-card.active .card-desc { display: block; }
+  .card-coords {
+    font-size: 10px;
+    font-family: monospace;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
+  .no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--ink-faint);
+    font-size: 13px;
+  }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    margin-top: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    overflow: hidden;
+    display: none;
+  }
+  .detail-panel.visible { display: block; }
+  .detail-header {
+    background: var(--navy);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .detail-icon {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+  .detail-title-wrap {}
+  .detail-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.25;
+  }
+  .detail-subtitle { font-size: 12px; color: var(--gold-light); margin-top: 3px; letter-spacing: 0.05em; }
+  .detail-body {
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+  }
+  .detail-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 3px;
+  }
+  .detail-field span {
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .detail-desc {
+    padding: 0 1.5rem 1.25rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    color: var(--ink-mid);
+    line-height: 1.75;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    margin-top: 3rem;
+    background: var(--navy-dark);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 2.5rem;
+    position: relative;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(176,125,42,0.05) 39px, rgba(176,125,42,0.05) 40px);
+    pointer-events: none;
+  }
+  .cta-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+  .cta-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .cta-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    max-width: 520px;
+  }
+  .cta-actions { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+  .btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--gold);
+    color: var(--navy-dark);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-secondary {
+    display: inline-block;
+    padding: 11px 24px;
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy-dark);
+    border-top: 2px solid var(--gold);
+    padding: 2rem;
+    text-align: center;
+    color: rgba(255,255,255,0.45);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    line-height: 1.8;
+  }
+  footer a { color: var(--gold-light); text-decoration: none; }
+  footer strong { color: rgba(255,255,255,0.7); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 800px) {
+    .map-layout { grid-template-columns: 1fr; }
+    .map-container { position: static; }
+    .sidebar { max-height: 360px; }
+    .detail-body { grid-template-columns: 1fr 1fr; }
+    .cta-section { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1rem 2.5rem; }
+  }
+  @media (max-width: 500px) {
+    .detail-body { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; }
+    .hero-stat { border-right: none; border-bottom: 1px solid rgba(176,125,42,0.3); }
+    .hero-stat:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://davidcole.exprealty.com" class="nav-brand">
+    <div class="nav-seal">🦅</div>
+    <div class="nav-wordmark">
+      <span class="nav-title">The Realtorian</span>
+      <span class="nav-tagline">Your tour guide in real estate</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://davidcole.exprealty.com">Home Search</a></li>
+    <li><a href="https://davidcole.exprealty.com">Buy</a></li>
+    <li><a href="https://davidcole.exprealty.com">Sell</a></li>
+    <li><a href="realtorian-seller-net-calculator.html">Net Calculator</a></li>
+    <li><a href="#contact" class="nav-cta">Contact David</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Upcountry, South Carolina</div>
+    <h1>The Southern Campaign<br>Fought Here</h1>
+    <p class="hero-subtitle">Interactive Revolutionary War History Map</p>
+    <p class="hero-desc">
+      The Backcountry SC was the turning point of the American Revolution in the South.
+      Explore 29 documented battle sites, forts, and skirmishes — many unknown to most South
+      Carolinians — that shaped the birth of a nation. Researched and curated by a descendant
+      of men who fought on this very ground.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-number">29</div>
+        <div class="stat-label">Documented sites</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Upstate counties</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-number">1775–1781</div>
+        <div class="stat-label">Active campaign years</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-number">GPS</div>
+        <div class="stat-label">Field-verified coords</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="page-content">
+
+  <!-- CONTROLS -->
+  <div class="controls-bar">
+    <button class="filter-btn active" data-filter="all">All Sites</button>
+    <button class="filter-btn" data-filter="battle">Battles</button>
+    <button class="filter-btn" data-filter="skirmish">Skirmishes</button>
+    <button class="filter-btn" data-filter="fort">Forts</button>
+    <button class="filter-btn" data-filter="notable">Notable</button>
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" id="search" placeholder="Search sites or counties…">
+    </div>
+  </div>
+
+  <!-- MAP + SIDEBAR -->
+  <div class="map-layout">
+    <div>
+      <div class="map-container">
+        <div class="map-header">
+          <span class="map-header-title">Upstate SC — Revolutionary War Sites</span>
+          <span class="map-header-sub">Click any marker to explore</span>
+        </div>
+        <div id="leaflet-map" style="width:100%;height:500px;"></div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div>Major battle</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div>Skirmish</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#1A3A6B"></div>Fort / stronghold</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div>Notable site</div>
+          <div class="legend-item" style="margin-left:auto;font-size:11px;color:#999;">★ = notable</div>
+        </div>
+      </div>
+
+      <!-- DETAIL PANEL -->
+      <div class="detail-panel" id="detail-panel">
+        <div class="detail-header">
+          <div class="detail-icon" id="detail-icon">⚔️</div>
+          <div class="detail-title-wrap">
+            <div class="detail-title" id="detail-title">Site Name</div>
+            <div class="detail-subtitle" id="detail-subtitle">Date · County</div>
+          </div>
+        </div>
+        <div class="detail-body">
+          <div class="detail-field"><label>Type</label><span id="d-type">—</span></div>
+          <div class="detail-field"><label>County</label><span id="d-county">—</span></div>
+          <div class="detail-field"><label>GPS Coordinates</label><span id="d-coords" style="font-family:monospace;font-size:12px">—</span></div>
+        </div>
+        <div class="detail-desc" id="d-desc"></div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar"></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section" id="contact">
+    <div>
+      <div class="cta-eyebrow">The Realtorian — David Cole · eXp Realty</div>
+      <div class="cta-heading">Your roots can run deep here too.</div>
+      <p class="cta-text">
+        This land shaped a nation. Today, it's one of the most affordable, livable, and fastest-growing
+        regions in the Southeast. David Cole is a lifelong student of Upcountry history — and a full-time
+        real estate agent who knows every corner of it. Whether you're relocating, investing in land,
+        or looking for your first home near these storied hills, let him be your tour guide.
+      </p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn-primary" href="https://davidcole.exprealty.com">Search Homes in Upstate SC</a>
+      <a class="btn-secondary" href="tel:+18285829506">Call David: (828) 582-9506</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <strong>The Realtorian</strong> · David Cole · eXp Realty · Simpsonville, SC<br>
+  Serving Greenville · Spartanburg · Laurens · Anderson · Cherokee · Greenwood Counties<br>
+  <a href="https://davidcole.exprealty.com">davidcole.exprealty.com</a> · <a href="mailto:Realtorian@DavidColeRE.com">Realtorian@DavidColeRE.com</a><br><br>
+  <span style="font-size:11px;opacity:0.5;">Historical research references: Parker's Guide to the Revolutionary War in South Carolina · Draper's King's Mountain and Its Heroes (1881) · GPS coordinates field-verified. Not a substitute for professional historical survey.</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const sites = [
+  {id:0,name:"Battle of Kings Mountain",lat:35.1394,lng:-81.4133,type:"battle",notable:true,date:"Oct 7, 1780",county:"Cherokee/York",icon:"⚔️",desc:"The turning point of the Southern Campaign. Patriot overmountain men destroyed a Loyalist force under Maj. Patrick Ferguson, ending British hopes of pacifying the Carolina backcountry. Joseph Cole Sr., a direct ancestor of The Realtorian's David Cole, fought here under Col. William Campbell of the Washington County Virginia Militia."},
+  {id:1,name:"Battle of Cowpens",lat:35.1308,lng:-81.8078,type:"battle",notable:true,date:"Jan 17, 1781",county:"Cherokee",icon:"⚔️",desc:"Daniel Morgan's masterpiece. A double-envelopment that decimated Tarleton's Legion and changed the course of the war in the South. One of the most tactically brilliant battles in American history — now a National Battlefield."},
+  {id:2,name:"Battle of Blackstocks",lat:34.8167,lng:-81.6333,type:"battle",notable:true,date:"Nov 20, 1780",county:"Union",icon:"⚔️",desc:"Thomas Sumter checked Tarleton's advance here, though the Gamecock was severely wounded. The engagement blunted British momentum following Kings Mountain and kept Patriot resistance alive in the backcountry."},
+  {id:3,name:"Battle of Cedar Spring",lat:34.9333,lng:-81.9500,type:"skirmish",notable:false,date:"Jul 12, 1780",county:"Spartanburg",icon:"🔥",desc:"One of two engagements at Cedar Spring. Patriot militia under Elijah Clarke and Thomas Sumter drove off a Loyalist force in a sharp action near the iron works, demonstrating early resistance to British occupation of the backcountry."},
+  {id:4,name:"Battle of Musgrove Mill",lat:34.5667,lng:-82.0000,type:"battle",notable:true,date:"Aug 19, 1780",county:"Laurens",icon:"⚔️",desc:"After the fall of Camden, Patriots desperately needed a victory. Clarke, Shelby, and Williams ambushed a superior Loyalist force at the Enoree River ford, killing or capturing over 200 men. A critical morale boost that helped set the stage for Kings Mountain."},
+  {id:5,name:"Hammonds Old Store",lat:34.3667,lng:-82.0500,type:"skirmish",notable:false,date:"Dec 30, 1780",county:"Laurens",icon:"🔥",desc:"A little-known but significant engagement. Patriot forces under Joseph Hayes intercepted a Loyalist column near this backcountry trading post, demonstrating the persistent guerrilla pressure that characterized the Laurens County war."},
+  {id:6,name:"Battle of Peach Trees",lat:34.9500,lng:-81.7000,type:"skirmish",notable:false,date:"Jul 15, 1780",county:"Spartanburg",icon:"🔥",desc:"A swift Patriot strike near the Pacolet River that disrupted Loyalist communication lines and supply movements in the Spartanburg district during the first months of British occupation."},
+  {id:7,name:"Fort Prince",lat:34.8833,lng:-81.9833,type:"fort",notable:false,date:"1780–1781",county:"Spartanburg",icon:"🏰",desc:"A Patriot earthwork stronghold on the Tyger River, used as a staging area for militia operations across the Spartanburg district. One of several backcountry forts that formed the Patriot defensive network during the British occupation period."},
+  {id:8,name:"Great Cane Break",lat:34.7000,lng:-82.1500,type:"battle",notable:false,date:"Dec 22, 1775",county:"Laurens/Greenwood",icon:"⚔️",desc:"One of the earliest Patriot military actions in South Carolina. A Whig force surprised a Loyalist encampment along Reedy River, effectively ending organized Loyalist resistance in the backcountry during the first phase of the war — nearly five years before Kings Mountain."},
+  {id:9,name:"Mud Lick Creek",lat:34.8000,lng:-81.8000,type:"skirmish",notable:false,date:"1781",county:"Union",icon:"🔥",desc:"A documented partisan engagement along Mud Lick Creek, part of the relentless low-level warfare that ground down British pacification efforts across Union County. Col. Roebuck's Spartan Regiment operated extensively in this area."},
+  {id:10,name:"Battle of Williamson's Plantation",lat:34.9833,lng:-81.3667,type:"battle",notable:false,date:"Jul 12, 1780",county:"York",icon:"⚔️",desc:"Also known as Huck's Defeat. British cavalry commander Col. Christian Huck was surprised at dawn by mounted Patriot militia. Huck was killed and his force scattered — a galvanizing moment that ignited backcountry resistance across the Carolinas."},
+  {id:11,name:"Fort Ninety Six",lat:34.1750,lng:-82.0167,type:"fort",notable:true,date:"1775–1781",county:"Greenwood",icon:"🏰",desc:"The most significant Loyalist stronghold in the SC backcountry. Nathanael Greene besieged it for 28 days in May–June 1781 in one of the longest sieges of the American Revolution. The fort changed hands multiple times throughout the war. Now a National Historic Site managed by the NPS."},
+  {id:12,name:"Battle of the Great Savannah",lat:33.9500,lng:-80.8167,type:"battle",notable:false,date:"Aug 20, 1780",county:"Sumter",icon:"⚔️",desc:"Sumter ambushed a British supply column the day after Camden, capturing desperately needed supplies, ammunition, and prisoners — a remarkable show of defiance following one of the worst Patriot defeats of the war."},
+  {id:13,name:"Battle of Fishing Creek",lat:34.7167,lng:-80.9833,type:"battle",notable:false,date:"Aug 18, 1780",county:"Chester",icon:"⚔️",desc:"Tarleton surprised Sumter's camp while the Gamecock's men rested after their Great Savannah victory. Sumter escaped nearly naked on horseback. A brutal reminder of the lightning strikes that made Tarleton so feared in the backcountry."},
+  {id:14,name:"Boyd's Ferry",lat:34.5833,lng:-82.7167,type:"skirmish",notable:false,date:"Feb 1779",county:"Anderson",icon:"🔥",desc:"Loyalist Col. John Boyd crossed the Savannah River here with over 700 men marching toward Augusta. Patriots tracked and destroyed his force at Kettle Creek, Georgia days later — one of the early major Patriot victories of the Southern Campaign."},
+  {id:15,name:"Battle of Stallion's Plantation",lat:34.8500,lng:-82.3000,type:"skirmish",notable:false,date:"1781",county:"Greenville",icon:"🔥",desc:"A partisan engagement in the Greenville district reflecting the ongoing irregular warfare throughout the Upcountry even as the main Continental armies maneuvered across the Carolinas toward Yorktown."},
+  {id:16,name:"Col. Roebuck's Area of Operations",lat:34.9500,lng:-81.9333,type:"notable",notable:true,date:"1780–1781",county:"Spartanburg",icon:"⭐",desc:"Col. Benjamin Roebuck commanded the SC Spartan Regiment of Militia, operating extensively throughout this area. He was wounded at Mud Lick, captured at Ninety Six, and exchanged in August 1781. The town of Roebuck, SC bears his name today. He is a direct ancestor of David Cole through the Pettit family line — making this ground deeply personal for The Realtorian."},
+  {id:17,name:"Battle of Brandon's Camp",lat:34.9167,lng:-81.8833,type:"skirmish",notable:false,date:"Jun 1780",county:"Union/Spartanburg",icon:"🔥",desc:"Patriot militia under Col. Thomas Brandon engaged Loyalist forces during the first weeks of British occupation of the backcountry. Brandon was one of the most tenacious Patriot leaders in the Spartanburg–Union district throughout the war."},
+  {id:18,name:"Battle of Earle's Ford",lat:35.0500,lng:-82.1500,type:"skirmish",notable:false,date:"Aug 1780",county:"Greenville/Spartanburg",icon:"🔥",desc:"A contested Pacolet River crossing that saw action as Patriot forces maneuvered and gathered ahead of the Kings Mountain campaign. The Pacolet was a critical natural boundary throughout the backcountry war."},
+  {id:19,name:"Battle of Wofford's Iron Works",lat:35.0000,lng:-81.9667,type:"skirmish",notable:false,date:"Jul 15, 1780",county:"Spartanburg",icon:"🔥",desc:"Fought the same day as Cedar Spring, this engagement near the iron works demonstrated coordinated Patriot pressure on British-held Spartanburg. Iron works were strategic targets — critical for weapons production — and their control was contested throughout the war."},
+  {id:20,name:"Gowdeysville Muster Ground",lat:34.9000,lng:-81.9000,type:"notable",notable:false,date:"1780",county:"Spartanburg",icon:"⭐",desc:"A primary gathering point for Patriot militia in the Spartanburg district, used to organize and muster forces for multiple operations. Militia musters were the backbone of backcountry resistance — where farmers became soldiers overnight."},
+  {id:21,name:"Fair Forest Crossroads",lat:34.8667,lng:-81.7667,type:"skirmish",notable:false,date:"1780–1781",county:"Union",icon:"🔥",desc:"Multiple engagements occurred near this crossroads throughout the war. A key junction in the backcountry road network used by both armies, it changed hands repeatedly and saw the kind of brutal neighbor-vs-neighbor fighting that defined the SC backcountry conflict."},
+  {id:22,name:"Tory Camp at Little River",lat:34.3833,lng:-82.2500,type:"skirmish",notable:false,date:"1780",county:"Laurens",icon:"🔥",desc:"Patriot partisans disrupted a Loyalist encampment along the Little River — one of dozens of such actions that never made history books but collectively wore down British pacification efforts throughout Laurens County."},
+  {id:23,name:"Fort Anderson",lat:34.9167,lng:-82.4500,type:"fort",notable:false,date:"1776",county:"Greenville",icon:"🏰",desc:"An early backcountry fort used during the Cherokee War and the opening phase of the Revolution, part of the frontier defense network in the Greenville district. The Cherokee conflict (1776) and the Revolution were deeply intertwined in the Upcountry backcountry."},
+  {id:24,name:"Battle of Hayes Station",lat:34.4167,lng:-82.1333,type:"battle",notable:false,date:"Nov 19, 1781",county:"Laurens",icon:"⚔️",desc:"One of the last major engagements in the SC backcountry. Loyalist 'Bloody Bill' Cunningham attacked and captured Patriot Col. Joseph Hayes, who was subsequently executed — an act that sparked outrage across the state and cemented Cunningham's dark legacy."},
+  {id:25,name:"Henry Pearis Grave Site",lat:35.0833,lng:-82.4333,type:"notable",notable:true,date:"d. 1799",county:"Greenville",icon:"⭐",desc:"Henry Pearis was one of the most complex figures of the Greenville backcountry — a British-allied trader, land speculator, and militia leader who embodied the divided loyalties that tore communities apart. His story is central to understanding the Revolution in Greenville County. Featured in The Realtorian's history content series."},
+  {id:26,name:"Battle of Inman's Camp",lat:34.9833,lng:-82.0333,type:"skirmish",notable:false,date:"Aug 1780",county:"Spartanburg",icon:"🔥",desc:"Patriot militia struck a Loyalist encampment commanded by Capt. Shadrack Inman as forces gathered for the Kings Mountain campaign. Inman was a significant Loyalist leader in Spartanburg County whose operations were a constant thorn in the Patriots' side."},
+  {id:27,name:"Walnut Grove Plantation",lat:34.9333,lng:-81.7500,type:"notable",notable:true,date:"1780s",county:"Spartanburg",icon:"⭐",desc:"Home of the Moore family — eyewitnesses to Tarleton's brutal raid through Spartanburg district. One of the best-preserved backcountry plantation sites in South Carolina, Walnut Grove offers a window into the world that backcountry families fought to defend. Open to the public today."},
+  {id:28,name:"Thicketty Fort",lat:35.1167,lng:-81.6167,type:"fort",notable:false,date:"Jul 1780",county:"Cherokee",icon:"🏰",desc:"A Loyalist fort that surrendered without a shot to Patriot forces under Col. Isaac Shelby in July 1780. The captured supplies and boost to morale were critical in the weeks before Kings Mountain — Shelby used this success to help recruit the overmountain men."}
+];
+
+const typeColor    = {battle:"#c0392b", skirmish:"#e67e22", fort:"#1A3A6B", notable:"#27ae60"};
+const typeLabel    = {battle:"Major Battle", skirmish:"Skirmish", fort:"Fort / Stronghold", notable:"Notable Site"};
+const typeBadgeBg  = {battle:"#fdf0ee", skirmish:"#fef5ec", fort:"#e8eef6", notable:"#eaf3de"};
+const typeBadgeCol = {battle:"#8B2020", skirmish:"#7d4a00", fort:"#0f2347", notable:"#1a5c1a"};
+
+let activeId = null;
+let currentFilter = "all";
+let searchVal = "";
+let leafletMarkers = {};
+
+// ── INIT LEAFLET MAP ──
+const map = L.map('leaflet-map', {
+  center: [34.85, -81.95],
+  zoom: 9,
+  zoomControl: true,
+  scrollWheelZoom: true
+});
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 18
+}).addTo(map);
+
+function makeMarkerIcon(site, isActive) {
+  const col = typeColor[site.type];
+  const size = isActive ? 24 : 16;
+  if (site.notable) {
+    const pts = [];
+    const r1 = size * 0.55, r2 = size * 0.22;
+    for (let i = 0; i < 10; i++) {
+      const angle = Math.PI / 5 * i - Math.PI / 2;
+      const r = i % 2 === 0 ? r1 : r2;
+      pts.push((size/2 + Math.cos(angle)*r).toFixed(1) + ',' + (size/2 + Math.sin(angle)*r).toFixed(1));
+    }
+    const svgSize = size + 8;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgSize}" height="${svgSize}" viewBox="0 0 ${svgSize} ${svgSize}">
+      <polygon points="${pts.map(p=>{const[x,y]=p.split(',');return (parseFloat(x)+4)+','+(parseFloat(y)+4)}).join(' ')}" fill="${col}" stroke="white" stroke-width="${isActive?2:1.5}"/>
+      ${isActive?`<circle cx="${svgSize/2}" cy="${svgSize/2}" r="${svgSize/2-1}" fill="none" stroke="${col}" stroke-width="2" opacity="0.4"/>`:''}
+    </svg>`;
+    return L.divIcon({
+      className: '',
+      html: svg,
+      iconSize: [svgSize, svgSize],
+      iconAnchor: [svgSize/2, svgSize/2],
+      popupAnchor: [0, -svgSize/2]
+    });
+  } else {
+    const svgSize = size + 8;
+    const r = size / 2;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgSize}" height="${svgSize}" viewBox="0 0 ${svgSize} ${svgSize}">
+      ${isActive?`<circle cx="${svgSize/2}" cy="${svgSize/2}" r="${svgSize/2-1}" fill="${col}" opacity="0.2"/>`:''}
+      <circle cx="${svgSize/2}" cy="${svgSize/2}" r="${r}" fill="${col}" stroke="white" stroke-width="${isActive?2.5:1.5}"/>
+    </svg>`;
+    return L.divIcon({
+      className: '',
+      html: svg,
+      iconSize: [svgSize, svgSize],
+      iconAnchor: [svgSize/2, svgSize/2],
+      popupAnchor: [0, -svgSize/2 - 2]
+    });
+  }
+}
+
+function buildPopup(s) {
+  const col = typeColor[s.type];
+  const bgBadge = typeBadgeBg[s.type];
+  const colBadge = typeBadgeCol[s.type];
+  return `<div class="popup-header" style="background:${col}">
+    <div class="popup-name">${s.icon} ${s.name}</div>
+    <div class="popup-meta">${s.date} · ${s.county} Co.</div>
+  </div>
+  <div class="popup-body">
+    <div class="popup-desc">${s.desc.substring(0,200)}${s.desc.length>200?'…':''}</div>
+    <span class="popup-badge" style="background:${bgBadge};color:${colBadge}">${typeLabel[s.type]}</span>
+  </div>`;
+}
+
+function filteredSites() {
+  return sites.filter(s => {
+    const typeMatch = currentFilter==="all" || s.type===currentFilter || (currentFilter==="notable" && s.notable);
+    const q = searchVal.toLowerCase();
+    const searchMatch = q==="" || s.name.toLowerCase().includes(q) || s.county.toLowerCase().includes(q) || s.date.toLowerCase().includes(q);
+    return typeMatch && searchMatch;
+  });
+}
+
+function initMarkers() {
+  sites.forEach(s => {
+    const marker = L.marker([s.lat, s.lng], { icon: makeMarkerIcon(s, false) })
+      .addTo(map)
+      .bindPopup(buildPopup(s), { maxWidth: 260, className: '' });
+    marker.on('click', () => selectSite(s.id));
+    leafletMarkers[s.id] = marker;
+  });
+}
+
+function updateMarkerVisibility() {
+  const fsIds = new Set(filteredSites().map(s => s.id));
+  sites.forEach(s => {
+    const marker = leafletMarkers[s.id];
+    const el = marker.getElement();
+    if (el) el.style.opacity = fsIds.has(s.id) ? '1' : '0.15';
+    marker.setIcon(makeMarkerIcon(s, s.id === activeId));
+  });
+}
+
+function renderSidebar() {
+  const sb = document.getElementById("sidebar");
+  const fs = filteredSites();
+  if (!fs.length) { sb.innerHTML = '<div class="no-results">No sites match your search</div>'; return; }
+  sb.innerHTML = fs.map(s => `
+    <div class="site-card${s.id===activeId?" active":""}" data-id="${s.id}">
+      <div class="card-top">
+        <div class="card-dot" style="background:${typeColor[s.type]}"></div>
+        <div style="flex:1">
+          <div class="card-name">${s.name}</div>
+          <div class="card-meta">${s.date} &nbsp;·&nbsp; ${s.county}</div>
+          <span class="card-badge" style="background:${typeBadgeBg[s.type]};color:${typeBadgeCol[s.type]}">${typeLabel[s.type]}</span>
+        </div>
+      </div>
+      ${s.id===activeId ? `
+        <div class="card-desc">${s.desc}
+          <div class="card-coords">📍 ${s.lat.toFixed(4)}°N, ${Math.abs(s.lng).toFixed(4)}°W</div>
+        </div>` : ""}
+    </div>`).join("");
+  sb.querySelectorAll(".site-card").forEach(el => {
+    el.addEventListener("click", () => selectSite(parseInt(el.dataset.id)));
+  });
+}
+
+function renderDetail() {
+  const dp = document.getElementById("detail-panel");
+  if (activeId === null) { dp.classList.remove("visible"); return; }
+  const s = sites.find(x => x.id === activeId);
+  dp.classList.add("visible");
+  document.getElementById("detail-icon").textContent = s.icon;
+  document.getElementById("detail-title").textContent = s.name;
+  document.getElementById("detail-subtitle").textContent = `${s.date}  ·  ${s.county} County`;
+  document.getElementById("d-type").textContent = typeLabel[s.type];
+  document.getElementById("d-county").textContent = s.county;
+  document.getElementById("d-coords").textContent = `${s.lat.toFixed(4)}°N, ${Math.abs(s.lng).toFixed(4)}°W`;
+  document.getElementById("d-desc").textContent = s.desc;
+}
+
+function selectSite(id) {
+  // Close previous popup
+  if (activeId !== null && leafletMarkers[activeId]) leafletMarkers[activeId].closePopup();
+
+  activeId = activeId === id ? null : id;
+
+  updateMarkerVisibility();
+  renderSidebar();
+  renderDetail();
+
+  if (activeId !== null) {
+    const s = sites.find(x => x.id === activeId);
+    map.setView([s.lat, s.lng], Math.max(map.getZoom(), 11), { animate: true });
+    leafletMarkers[activeId].openPopup();
+    const card = document.querySelector(`.site-card[data-id="${activeId}"]`);
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    document.getElementById("detail-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    updateMarkerVisibility();
+    renderSidebar();
+    renderDetail();
+  });
+});
+
+document.getElementById("search").addEventListener("input", e => {
+  searchVal = e.target.value.trim();
+  updateMarkerVisibility();
+  renderSidebar();
+  renderDetail();
+});
+
+initMarkers();
+renderSidebar();
+</script>
+</body>
+</html>
